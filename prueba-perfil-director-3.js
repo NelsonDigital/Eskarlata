@@ -16,6 +16,7 @@ auth.onAuthStateChanged((user) => {
             $("#telefono").text(datos.Telefono);
             $("#email").text(datos.Email);
 
+            $("#estado-contrato-ojo").text(datos.EstadoContratoOjo ? datos.EstadoContratoOjo : "En espera de archivo");
             $("#estado-cuentas-participacion").text(datos.EstadoCuentasParticipacion ? datos.EstadoCuentasParticipacion : "En espera de archivo");
             $("#estado-compra-venta").text(datos.EstadoArchivoCompraVenta ? datos.EstadoArchivoCompraVenta : "En espera de archivo");
             $("#estado-autorizacion-mejoras").text(datos.EstadoArchivoAutorizacionMejoras ? datos.EstadoArchivoAutorizacionMejoras : "En espera de archivo");
@@ -48,7 +49,7 @@ function barra() {
     const userDocumentRef = db.collection("users").doc(userId);
         userDocumentRef.get().then((doc) => {
             const datos = doc.data();
-            const estados = [datos.EstadoArchivoCompraVenta, datos.EstadoCuentasParticipacion, datos.EstadoArchivoAutorizacionMejoras, datos.EstadoComprobantePago], totalEstados = estados.length, estadosDefinidos = estados.filter(o => null != o), cantidadEstadosDefinidos = estadosDefinidos.length, porcentajeEstadosDefinidos = cantidadEstadosDefinidos / totalEstados * 100; cantidadEstadosDefinidos > 0 && ($("#barra-informacion").css("width", porcentajeEstadosDefinidos + "%"), $("#porcentaje_informacion").text(porcentajeEstadosDefinidos + "%"));
+            const estados = [datos.EstadoContratoOjo, datos.EstadoArchivoCompraVenta, datos.EstadoCuentasParticipacion, datos.EstadoArchivoAutorizacionMejoras, datos.EstadoComprobantePago], totalEstados = estados.length, estadosDefinidos = estados.filter(o => null != o), cantidadEstadosDefinidos = estadosDefinidos.length, porcentajeEstadosDefinidos = cantidadEstadosDefinidos / totalEstados * 100; cantidadEstadosDefinidos > 0 && ($("#barra-informacion").css("width", porcentajeEstadosDefinidos + "%"), $("#porcentaje_informacion").text(Math.round(porcentajeEstadosDefinidos) + "%"));
         });
 }
 
