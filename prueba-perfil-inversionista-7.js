@@ -41,9 +41,9 @@ function barra() {
         const datos = doc.data();
 
         const colores = {
-            "En espera de archivo": "blue",
-            "En revisión": "yellow",
-            "Aprobado": "green",
+            "En espera de archivo": "#00b6ff",
+            "En revisión": "#ffa109",
+            "Aprobado": "#38b43c",
             "Denegado": "red"
         };
 
@@ -207,7 +207,7 @@ document.addEventListener("DOMContentLoaded", function () {
         storageRef.put(file).then(() => {
             storageRef.getDownloadURL().then(url => {
                 let userRef = db.collection("users").doc(userId);
-                userRef.update({ ArchivoCompraVenta: url, EstadoAutorizacionMejoras: "En revisión" }).then(() => {
+                userRef.update({ ArchivoAutorizacionMejoras: url, EstadoAutorizacionMejoras: "En revisión" }).then(() => {
                     $("#estado-autorizacion-mejoras").text("En revisión");
                     $("#texto-autorizacion-mejoras").text("Cargar");
                     barra();
@@ -278,7 +278,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const inputAutorizacionMejoras = document.getElementById("cargar-archivo-documento");
 
     inputAutorizacionMejoras.addEventListener("change", e => {
-        $("#texto-documentos").text("Cargando archivo...");
+        $("#texto-documento").text("Cargando archivo...");
         let file = e.target.files[0];
         let storageRef = firebase.storage().ref(`users/${userId}/documento-identificacion`);
 
