@@ -164,7 +164,41 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-const CargarPerfil = document.getElementById("cargar-perfil"), CargarPerfilInput = document.createElement("input"); CargarPerfilInput.setAttribute("type", "file"), CargarPerfilInput.setAttribute("id", "cargar-fotos"), CargarPerfilInput.setAttribute("accept", "image/*"), CargarPerfilInput.style.display = "none", CargarPerfil.parentNode.insertBefore(CargarPerfilInput, CargarPerfil.nextSibling), CargarPerfil.addEventListener("click", () => { CargarPerfilInput.click() }), document.addEventListener("DOMContentLoaded", function () { let r = document.getElementById("cargar-fotos"); r.addEventListener("change", r => { CargarPerfil.text("Cargando imagen..."); let e = r.target.files[0], t = firebase.storage().ref(`users/${userId}/perfil`); t.put(e).then(() => { t.getDownloadURL().then(r => { db.collection("users").doc(userId).update({ fotoUrl: r }).then(() => { $(".foto").attr("src", r).attr("srcset", r), CargarPerfil.text("SUBIR IMAGEN") }).catch(r => { CargarPerfil.text("Error al cargar imagen"), console.error(r) }) }) }) }) });
+const cargarPerfil = document.getElementById("cargar-perfil");
+const cargarPerfilInput = document.createElement("input");
+cargarPerfilInput.setAttribute("type", "file");
+cargarPerfilInput.setAttribute("id", "cargar-fotos");
+cargarPerfilInput.setAttribute("accept", "image/*");
+cargarPerfilInput.style.display = "none";
+
+cargarPerfil.parentNode.insertBefore(cargarPerfilInput, cargarPerfil.nextSibling);
+
+cargarPerfil.addEventListener("click", () => {
+    cargarPerfilInput.click();
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const inputFoto = document.getElementById("cargar-fotos");
+    const mensaje = $("#cargar-perfil");
+
+    inputFoto.addEventListener("change", e => {
+        mensaje.text("Cargando imagen...");
+        let file = e.target.files[0];
+        let storageRef = firebase.storage().ref(`users/${userId}/perfil`);
+        storageRef.put(file).then(() => {
+            storageRef.getDownloadURL().then(url => {
+                let userRef = db.collection("users").doc(userId);
+                userRef.update({ fotoUrl: url }).then(() => {
+                    $(".foto").attr("src", url).attr("srcset", url);
+                    mensaje.text("Subir imagen");
+                }).catch(error => {
+                    mensaje.text("Error al cargar imagen");
+                    console.error(error);
+                });
+            });
+        });
+    });
+});
 
 const cargarArchivoCompraVenta = document.getElementById("cargar-compra-venta");
 const cargarArchivoCompraVentaInput = document.createElement("input");
